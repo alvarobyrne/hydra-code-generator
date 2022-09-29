@@ -135,7 +135,7 @@ class CodeGenerator {
         this.exclusiveFunctionList = exclusiveFunctionList;
       else if (!exclusiveFunctionList.length) {
         this.printError(
-          "One or more of the specified exclusive functions don't exist"
+          "One or more of the specified exclusive functions doesn't exist"
         );
         return;
       }
@@ -277,35 +277,54 @@ class CodeGenerator {
       .fill("")
       .forEach((_) => {
         code += "  " + this.genFunction() + "\n";
-        code += ".out(o0)";
       });
+    code += ".out(o0)";
     return code;
   }
 
+  exclusiveIgnoredInteresection() {
+    return intersection(this.exclusiveSourceList, this.ignoredList);
+  }
   /**
    * returns a source calling one of them randomly
    */
 
   genSource() {
-    const rc = random.choice(this.sourcesList);
-    console.log("rc: ", rc);
-    /*
-      const fullSource = operator.methodcaller(random.choice((this.sourcesList)))(this);
-      const source=fullSource.split("(")[0] // just source name
-      const start = time.time() // avoids failing when everything is ignored
-      while((!this.isExclusiveSource(source))|| this.isIgnored(source) && (time.time() < (start + 10))){}
-      fullSource = operator.methodcaller(random.choice((this.sourcesList)))(this)
-      source=fullSource.split("(")[0]
-      if(time.time() >= (start + 15)):
-      this.printError("Could't generate a Source (You ignored all of them")
-      return
-      else:
-      return fullSource
-      */
+    let listToChooseFrom: string[];
+    if (this.exclusiveSourceList.length > 0)
+      listToChooseFrom = this.exclusiveSourceList;
+    else listToChooseFrom = this.sourcesList;
+    const igonredAndExclusive = this.exclusiveIgnoredInteresection();
+    if (igonredAndExclusive.length) {
+      throw new Error(
+        `the function(s) ${igonredAndExclusive.toString()} are marked as ignored and exclusive`
+      );
+    }
+    const rc = random.choice(listToChooseFrom);
+    // console.log("rc: ", rc);
+    const method = this[rc]();
+    // console.log("method: ", method);
+    return method;
   }
   genFunction() {
-    const f = random.choice(this.functionsList);
-    console.log("f: ", f);
+    let listToChooseFrom: string[];
+    if (this.exclusiveFunctionList.length > 0)
+      listToChooseFrom = this.exclusiveFunctionList;
+    else listToChooseFrom = this.functionsList;
+    const igonredAndExclusive = intersection(
+      this.exclusiveFunctionList,
+      this.ignoredList
+    );
+
+    if (igonredAndExclusive.length) {
+      throw new Error(
+        `the function(s) ${igonredAndExclusive.toString()} are marked as ignored and exclusive`
+      );
+    }
+    const rc = random.choice(listToChooseFrom);
+    const method = this[rc]();
+    // console.log("method: ", method);
+    return method;
   }
   setExclusiveSource(name: string, isExclusive: boolean) {
     if (isExclusive) {
@@ -332,10 +351,418 @@ class CodeGenerator {
       this.ignoredList.splice(i, 1);
     }
   }
-}
+  // SOURCES ---
 
+  gradient() {
+    return "gradient(" + this.genValue() + ")";
+  }
+
+  noise() {
+    return "noise(" + this.genValue() + ", " + this.genValue() + ")";
+  }
+
+  osc() {
+    return (
+      "osc(" +
+      this.genValue() +
+      ", " +
+      this.genValue() +
+      ", " +
+      this.genValue() +
+      ")"
+    );
+  }
+
+  shape() {
+    return (
+      "shape(" +
+      this.genValue() +
+      ", " +
+      this.genCeroPointFiveValue() +
+      ", " +
+      this.genCeroPointOneToOne() +
+      ")"
+    );
+  }
+
+  solid() {
+    return (
+      "solid(" +
+      this.genCeroOneValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ", " +
+      this.genCeroPointOneToMax() +
+      ")"
+    );
+  }
+
+  voronoi() {
+    return (
+      "voronoi(" +
+      this.genValue() +
+      ", " +
+      this.genValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ")"
+    );
+  }
+
+  // END SOURCES ---}
+  // FUNCTION METHODS ---
+
+  // returns a color function calling one of them randomly
+  genColor() {
+    const chosen = random.choice(this.colorList);
+    return this[chosen]();
+  }
+
+  // returns a geometry function calling one of them randomly
+  genGeometry() {
+    const chosen = random.choice(this.geometryList);
+    return this[chosen]();
+  }
+
+  // returns a geometry function calling one of them randomly
+  genModulator() {
+    const chosen = random.choice(this.modulatorsList);
+    return this[chosen]();
+  }
+
+  // returns an operator function calling one of them randomly
+  genOperator() {
+    const chosen = random.choice(this.operatorsList);
+    return this[chosen]();
+  }
+
+  // END FUNCTION METHODS ---
+
+  // COLOR ---
+
+  brightness() {
+    return ".brightness(" + this.genCeroOneValue() + ")";
+  }
+
+  contrast() {
+    return ".contrast(" + this.genCeroPointOneToMax() + ")";
+  }
+
+  color() {
+    return (
+      ".color(" +
+      this.genCeroOneValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ")"
+    );
+  }
+
+  colorama() {
+    return ".colorama(" + this.genValue() + ")";
+  }
+
+  invert() {
+    return ".invert(" + this.genCeroOneValue() + ")";
+  }
+
+  luma() {
+    return ".luma(" + this.genCeroOneValue() + ")";
+  }
+
+  posterize() {
+    return (
+      ".posterize(" +
+      this.genCeroOneValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ")"
+    );
+  }
+
+  saturate() {
+    return ".saturate(" + this.genValue() + ")";
+  }
+
+  thresh() {
+    return (
+      ".thresh(" + this.genCeroOneValue() + ", " + this.genCeroOneValue() + ")"
+    );
+  }
+
+  // ENDCOLOR ---
+
+  // GEOMETRY ---
+
+  kaleid() {
+    return ".kaleid(" + this.genValue() + ")";
+  }
+
+  pixelate() {
+    return (
+      ".pixelate(" +
+      this.genCeroPointOneToMax() +
+      ", " +
+      this.genCeroPointOneToMax() +
+      ")"
+    );
+  }
+
+  repeat() {
+    return (
+      ".repeat(" +
+      this.genValue() +
+      ", " +
+      this.genValue() +
+      ", " +
+      this.genValue() +
+      ", " +
+      this.genValue() +
+      ")"
+    );
+  }
+
+  repeatX() {
+    return ".repeatX(" + this.genValue() + ", " + this.genValue() + ")";
+  }
+
+  repeatY() {
+    return ".repeatY(" + this.genValue() + ", " + this.genValue() + ")";
+  }
+
+  rotate() {
+    return ".rotate(" + this.genValue() + ", " + this.genValue() + ")";
+  }
+
+  scale() {
+    return (
+      ".scale(" +
+      this.genPosOrNegValue() +
+      ", " +
+      this.genCeroPointOneToOne() +
+      ", " +
+      this.genCeroPointOneToOne() +
+      ")"
+    );
+  }
+
+  scrollX() {
+    return ".scrollX(" + this.genValue() + ", " + this.genValue() + ")";
+  }
+
+  scrollY() {
+    return ".scrollY(" + this.genValue() + ", " + this.genValue() + ")";
+  }
+
+  // ENDGEOMETRY ---
+
+  // OPERATORS ---
+
+  add() {
+    return ".add(" + this.genSource() + ", " + this.genCeroOneValue() + ")";
+  }
+
+  blend() {
+    return ".blend(" + this.genSource() + ", " + this.genCeroOneValue() + ")";
+  }
+
+  diff() {
+    return ".diff(" + this.genSource() + ")";
+  }
+
+  layer() {
+    return ".layer(" + this.genSource() + ")";
+  }
+
+  mask() {
+    return (
+      ".mask(" +
+      this.genSource() +
+      ", " +
+      this.genValue() +
+      ", " +
+      this.genCeroOneValue() +
+      ")"
+    );
+  }
+
+  mult() {
+    return ".mult(" + this.genSource() + ", " + this.genCeroOneValue() + ")";
+  }
+
+  // END OPERATORS ---
+  // MODULATORS ---
+
+  modulate() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return ".modulate(o0, " + this.genValue() + ")";
+    else return ".modulate(" + this.genSource() + ", " + this.genValue() + ")";
+  }
+
+  modulateHue() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return ".modulateHue(o0, " + this.genValue() + ")";
+    else
+      return ".modulateHue(" + this.genSource() + ", " + this.genValue() + ")";
+  }
+
+  modulateKaleid() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return ".modulateKaleid(o0, " + this.genValue() + ")";
+    else
+      return (
+        ".modulateKaleid(" + this.genSource() + ", " + this.genValue() + ")"
+      );
+  }
+
+  modulatePixelate() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return ".modulatePixelate(o0, " + this.genValue() + ")";
+    else
+      return (
+        ".modulatePixelate(" + this.genSource() + ", " + this.genValue() + ")"
+      );
+  }
+
+  modulateRepeat() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return (
+        ".modulateRepeat(o0, " +
+        this.genValue() +
+        ", " +
+        this.genValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+    else
+      return (
+        ".modulateRepeat(" +
+        this.genSource() +
+        ", " +
+        this.genValue() +
+        ", " +
+        this.genValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+  }
+
+  modulateRepeatX() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return (
+        ".modulateRepeatX(o0, " +
+        this.genValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+    else
+      return (
+        ".modulateRepeatX(" +
+        this.genSource() +
+        ", " +
+        this.genValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+  }
+
+  modulateRepeatY() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return (
+        ".modulateRepeatY(o0, " +
+        this.genValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+    else
+      return (
+        ".modulateRepeatY(" +
+        this.genSource() +
+        ", " +
+        this.genValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+  }
+
+  modulateRotate() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return ".modulateRotate(o0, " + this.genValue() + ")";
+    else
+      return (
+        ".modulateRotate(" + this.genSource() + ", " + this.genValue() + ")"
+      );
+  }
+
+  modulateScale() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return ".modulateScale(o0, " + this.genValue() + ")";
+    else
+      return (
+        ".modulateScale(" + this.genSource() + ", " + this.genValue() + ")"
+      );
+  }
+
+  modulateScrollX() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return (
+        ".modulateScrollX(o0, " +
+        this.genCeroOneValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+    else
+      return (
+        ".modulateScrollX(" +
+        this.genSource() +
+        ", " +
+        this.genCeroOneValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+  }
+
+  modulateScrollY() {
+    if (random.randint(1, 100) <= this.modulateItselfProb)
+      return (
+        ".modulateScrollY(o0, " +
+        this.genCeroOneValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+    else
+      return (
+        ".modulateScrollY(" +
+        this.genSource() +
+        ", " +
+        this.genCeroOneValue() +
+        ", " +
+        this.genCeroOneValue() +
+        ")"
+      );
+  }
+
+  // END MODULATORS ---
+}
 /*javascript function that checks if a given set is a subset of another given one*/
-function isSubset(set: Array<string>, superSet: Array<string>) {
+function isSubset(set: string[], superSet: string[]) {
   for (var i = 0; i < set.length; i++) {
     if (superSet.indexOf(set[i]) === -1) {
       return false;
@@ -350,9 +777,22 @@ class random {
   static uniform(min: number, max: number) {
     return Math.random() * (max - min) + min;
   }
-  static choice(list: Array<any>) {
+  static choice(list: any[]) {
     var index = Math.floor(Math.random() * list.length);
     return list[index];
   }
+}
+/* javascript function that returns the intersection of two given arrays*/
+function intersection(arr1: any[], arr2: any[]) {
+  var result = [];
+  for (var i = 0; i < arr1.length; i++) {
+    for (var j = 0; j < arr2.length; j++) {
+      if (arr1[i] == arr2[j]) {
+        result.push(arr1[i]);
+        break;
+      }
+    }
+  }
+  return result;
 }
 export default CodeGenerator;
