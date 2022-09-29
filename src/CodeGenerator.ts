@@ -69,26 +69,32 @@ class CodeGenerator {
     "modulateScrollX",
     "modulateScrollY",
   ];
-  public exclusiveSourceList = [];
-  public exclusiveFunctionList = [];
+  public allFunctions = [
+    ...this.colorList,
+    ...this.geometryList,
+    ...this.modulatorsList,
+    ...this.operatorsList,
+  ];
+  public exclusiveSourceList: string[] = [];
+  public exclusiveFunctionList: string[] = [];
   constructor({
-    min = 0,
-    max = 5,
-    arrowFunctionProb = 10,
-    mouseFunctionProb = 0,
-    modulateItselfProb = 20,
-    ignoredList = [],
-    exclusiveSourceList = [],
-    exclusiveFunctionList = [],
+    min,
+    max,
+    arrowFunctionProb,
+    mouseFunctionProb,
+    modulateItselfProb,
+    ignoredList,
+    exclusiveSourceList,
+    exclusiveFunctionList,
   }: CodeGeneratorProps) {
-    if (!min) this.minValue = min;
-    if (!max) this.maxValue = max;
-    if (!min && !max && min > max) {
+    if (min) this.minValue = min;
+    if (max) this.maxValue = max;
+    if (min && max && min > max) {
       this.printError("Argument max value must be bigger than min value.");
       return;
     }
-    if (!ignoredList && ignoredList.length) this.ignoredList = ignoredList;
-    if (!arrowFunctionProb)
+    if (ignoredList && ignoredList.length) this.ignoredList = ignoredList;
+    if (arrowFunctionProb)
       if (0 <= arrowFunctionProb && arrowFunctionProb <= 100)
         this.arrowFunctionProb = arrowFunctionProb;
       else {
@@ -97,7 +103,7 @@ class CodeGenerator {
         );
         return;
       }
-    if (!mouseFunctionProb)
+    if (mouseFunctionProb)
       if (0 <= mouseFunctionProb && mouseFunctionProb <= 100)
         this.mouseFunctionProb = mouseFunctionProb;
       else {
@@ -106,7 +112,7 @@ class CodeGenerator {
         );
         return;
       }
-    if (!modulateItselfProb)
+    if (modulateItselfProb)
       if (0 <= modulateItselfProb && modulateItselfProb <= 100)
         this.modulateItselfProb = modulateItselfProb;
       else {
@@ -115,7 +121,7 @@ class CodeGenerator {
         );
         return;
       }
-    if (!exclusiveSourceList && exclusiveSourceList.length > 0)
+    if (exclusiveSourceList && exclusiveSourceList.length > 0)
       if (this.checkSources(exclusiveSourceList))
         this.exclusiveSourceList = exclusiveSourceList;
       else if (!exclusiveSourceList.length) {
@@ -124,7 +130,7 @@ class CodeGenerator {
         );
         return;
       }
-    if (!exclusiveFunctionList && exclusiveFunctionList.length > 0)
+    if (exclusiveFunctionList && exclusiveFunctionList.length > 0)
       if (this.checkFunctions(exclusiveFunctionList))
         this.exclusiveFunctionList = exclusiveFunctionList;
       else if (!exclusiveFunctionList.length) {
@@ -152,7 +158,7 @@ class CodeGenerator {
       return;
     }
   }
-  printError(msg) {
+  printError(msg: string) {
     console.log(msg);
   }
   checkSources(sources: string[]) {
@@ -255,13 +261,14 @@ class CodeGenerator {
   genCeroPointOneToOne() {
     const arrow = this.genArrowFunctionValue();
     if (arrow != "") return arrow;
-    else return str(this.truncate(random.uniform(0.1, 1), 2));
+    else return this.truncate(random.uniform(0.1, 1), 2).toString();
   }
   // END VALUE GENERATION METHODS ---
 
   // MAIN METHODS ---
-  /*
-  generateCode(minFunctions, maxFunctions) {
+
+  generateCode(minFunctions: number, maxFunctions: number) {
+    // return;
     const functionsAmount = random.randint(minFunctions, maxFunctions);
     let code = "";
     code += this.info;
@@ -274,13 +281,15 @@ class CodeGenerator {
       });
     return code;
   }
-  */
+
   /**
    * returns a source calling one of them randomly
    */
-  /*
-  genSource(){
 
+  genSource() {
+    const rc = random.choice(this.sourcesList);
+    console.log("rc: ", rc);
+    /*
       const fullSource = operator.methodcaller(random.choice((this.sourcesList)))(this);
       const source=fullSource.split("(")[0] // just source name
       const start = time.time() // avoids failing when everything is ignored
@@ -292,8 +301,37 @@ class CodeGenerator {
       return
       else:
       return fullSource
+      */
+  }
+  genFunction() {
+    const f = random.choice(this.functionsList);
+    console.log("f: ", f);
+  }
+  setExclusiveSource(name: string, isExclusive: boolean) {
+    if (isExclusive) {
+      this.exclusiveSourceList.push(name);
+    } else {
+      const i = this.exclusiveSourceList.indexOf(name);
+      this.exclusiveSourceList.splice(i, 1);
     }
-    */
+  }
+  // exclusiveFunctionList
+  setExclusiveFunction(name: string, isExclusive: boolean) {
+    if (isExclusive) {
+      this.exclusiveFunctionList.push(name);
+    } else {
+      const i = this.exclusiveFunctionList.indexOf(name);
+      this.exclusiveFunctionList.splice(i, 1);
+    }
+  }
+  setIgnoredElement(name: string, isIgnored: boolean) {
+    if (isIgnored) {
+      this.ignoredList.push(name);
+    } else {
+      const i = this.ignoredList.indexOf(name);
+      this.ignoredList.splice(i, 1);
+    }
+  }
 }
 
 /*javascript function that checks if a given set is a subset of another given one*/
