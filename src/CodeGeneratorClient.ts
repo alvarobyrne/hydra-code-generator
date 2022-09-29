@@ -1,15 +1,15 @@
 import CodeGenerator from "./CodeGenerator";
 import dat from "dat.gui";
-class CodeGeneratorClient {
+import { EventEmitter } from "eventemitter3";
+export const CODE_GENERATED = "code:generated";
+class CodeGeneratorClient extends EventEmitter {
   constructor() {
+    super();
     const hydra = new CodeGenerator({
       ignoredList: [],
       exclusiveFunctionList: [],
       exclusiveSourceList: [],
     });
-    console.log("hydra: ", hydra);
-    const allSources = hydra.sourcesList;
-    console.log("allSources: ", allSources);
 
     const gui = new dat.GUI();
     gui.width = 500;
@@ -46,13 +46,13 @@ class CodeGeneratorClient {
       )
       .name("Generate code");
 
-    function doGenerateCode() {
+    const doGenerateCode = () => {
       const code = hydra.generateCode(
         model.minAmountFunctions,
         model.maxAmountFunctions
       );
-      console.log("code: ", code);
-    }
+      this.emit(CODE_GENERATED, code);
+    };
     const exclusiveSourcesFolder = gui.addFolder("Exclusive sources");
     hydra.sourcesList.map((name) => {
       const isExclusive = hydra.exclusiveSourceList.includes(name);
@@ -76,7 +76,6 @@ class CodeGeneratorClient {
       controller.onChange((value) => {
         hydra.setExclusiveFunction(name, value);
         const ef = hydra.exclusiveFunctionList;
-        console.log("ef: ", ef);
       });
     });
 
@@ -90,7 +89,6 @@ class CodeGeneratorClient {
       controller.onChange((value) => {
         hydra.setIgnoredElement(name, value);
         const ef = hydra.ignoredList;
-        console.log("ef: ", ef);
       });
     });
   }
