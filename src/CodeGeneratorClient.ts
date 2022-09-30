@@ -1,6 +1,7 @@
 import CodeGenerator from "./CodeGenerator";
 import dat from "dat.gui";
 import { EventEmitter } from "eventemitter3";
+import clickable from "./utils/dat.gui.clickable";
 export const CODE_GENERATED = "code:generated";
 class CodeGeneratorClient extends EventEmitter {
   constructor() {
@@ -35,16 +36,22 @@ class CodeGeneratorClient extends EventEmitter {
     gui
       .add(hydra, "modulateItselfProb", 0, 100)
       .name("source self modulation probability");
-    gui
+    const generateCodeButton = gui
       .add(
         {
           f() {
             doGenerateCode();
+            buttonElement?.removeAttribute("style");
           },
         },
         "f"
       )
       .name("Generate code");
+    const buttonElement: HTMLLIElement = generateCodeButton.domElement
+      .parentNode!.parentNode as HTMLLIElement;
+    buttonElement.style.backgroundColor = "red";
+    buttonElement.style.textShadow = "none";
+    buttonElement.style.color = "black";
 
     const doGenerateCode = () => {
       const code = hydra.generateCode(
@@ -92,6 +99,24 @@ class CodeGeneratorClient extends EventEmitter {
         hydra.setIgnoredElement(name, value);
       });
     });
+
+    const externalLinksFolder = gui.addFolder("Links");
+    clickable(
+      "https://github.com/alvarobyrne/hydra-code-generator",
+      "this repo's code",
+      externalLinksFolder
+    );
+    clickable(
+      "https://hydracg.herokuapp.com/",
+      "original app",
+      externalLinksFolder
+    );
+    clickable(
+      "https://github.com/alecominotti/hydracodegenerator",
+      "original python repo",
+      externalLinksFolder
+    );
+
     setTimeout(doGenerateCode, 1000);
   }
 }
