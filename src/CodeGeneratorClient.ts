@@ -20,10 +20,10 @@ class CodeGeneratorClient extends EventEmitter {
     hydra.mouseFunctionProb;
     const model = { minAmountFunctions: 3, maxAmountFunctions: 10 };
     gui
-      .add(model, "minAmountFunctions", 0, 10)
+      .add(model, "minAmountFunctions", 0, 10, 1)
       .name("minimum amount of functions");
     gui
-      .add(model, "maxAmountFunctions", 0, 10)
+      .add(model, "maxAmountFunctions", 0, 10, 1)
       .name("maximum amount of functions");
     gui
       .add(hydra, "arrowFunctionProb", 0, 100)
@@ -91,6 +91,7 @@ class CodeGeneratorClient extends EventEmitter {
         const ef = hydra.ignoredList;
       });
     });
+    setTimeout(doGenerateCode, 1000);
   }
 }
 export default CodeGeneratorClient;
