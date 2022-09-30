@@ -54,7 +54,7 @@ class CodeGeneratorClient extends EventEmitter {
       this.emit(CODE_GENERATED, code);
     };
     const exclusiveSourcesFolder = gui.addFolder("Exclusive sources");
-    hydra.sourcesList.map((name) => {
+    CodeGenerator.sourcesList.map((name) => {
       const isExclusive = hydra.exclusiveSourceList.includes(name);
       const model = {
         f: (q: boolean) => {
@@ -68,18 +68,20 @@ class CodeGeneratorClient extends EventEmitter {
     });
 
     const exclusiveFunctionsFolder = gui.addFolder("Exclusive functions");
-    hydra.allFunctions.forEach((name) => {
+    CodeGenerator.allFunctions.forEach((name) => {
       const isExclusive = hydra.exclusiveFunctionList.includes(name);
       const controller = exclusiveFunctionsFolder
         .add({ f: isExclusive }, "f")
         .name(name);
       controller.onChange((value) => {
         hydra.setExclusiveFunction(name, value);
-        const ef = hydra.exclusiveFunctionList;
       });
     });
 
-    const sourcesAndFunctions = [...hydra.sourcesList, ...hydra.allFunctions];
+    const sourcesAndFunctions = [
+      ...CodeGenerator.sourcesList,
+      ...CodeGenerator.allFunctions,
+    ];
     const ignoredElemenntsFolder = gui.addFolder("Ignored elements");
     sourcesAndFunctions.forEach((name) => {
       const isIgnored = hydra.ignoredList.includes(name);
@@ -88,7 +90,6 @@ class CodeGeneratorClient extends EventEmitter {
         .name(name);
       controller.onChange((value) => {
         hydra.setIgnoredElement(name, value);
-        const ef = hydra.ignoredList;
       });
     });
     setTimeout(doGenerateCode, 1000);
