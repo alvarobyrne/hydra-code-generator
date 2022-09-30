@@ -15,6 +15,7 @@ https://alvarobyrne.github.io/hydra-code-generator/
 # TODO:
 
 - one shouldn't be able to mark the same function as _exclusive_ and _ignored_ at the same time
+- Remove many @ts-ignore comments
 ### Other functions 
 
 That I would like to add:
