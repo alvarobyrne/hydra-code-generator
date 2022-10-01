@@ -70,6 +70,16 @@
   resolved "https://registry.yarnpkg.com/@codemirror/state/-/state-6.1.2.tgz#182d46eabcc17c95508984d6add5a5a641dcd517"
   integrity sha512-Mxff85Hp5va+zuj+H748KbubXjrinX/k28lj43H14T2D0+4kuvEFIEIO7hCEcvBT8ubZyIelt9yGOjj2MWOEQA==
 
+"@codemirror/theme-one-dark@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/theme-one-dark/-/theme-one-dark-6.1.0.tgz#6f8b3c7fc22e9fec59edd573f4ba9546db42e007"
+  integrity sha512-AiTHtFRu8+vWT9wWUWDM+cog6ZwgivJogB1Tm/g40NIpLwph7AnmxrSzWfvJN5fBVufsuwBxecQCNmdcR5D7Aw==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+    "@lezer/highlight" "^1.0.0"
+
 "@codemirror/view@^6.0.0":
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.3.0.tgz#715c97d64e7e20c9674782e7101ab7aefef8e23d"
@@ -437,6 +447,13 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+hydra-ts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/hydra-ts/-/hydra-ts-1.0.0.tgz#0272623e1b801d6b98daaa91579aec665dc517d0"
+  integrity sha512-qJXbIogzOXL8GIJauggAuuwPSqKdWsjlpHQ+oJt+dUo2bbRuvwFRQHAXld0BKU6a+9dZ2Kw2EWLyUi8pPKt13Q==
+  dependencies:
+    regl "^1.3.9"
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -578,6 +595,16 @@ postcss@^8.4.16:
     nanoid "^3.3.4"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
+
+regl@^1.3.9:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/regl/-/regl-1.7.0.tgz#0d185431044a356bf80e9b775b11b935ef2746d3"
+  integrity sha512-bEAtp/qrtKucxXSJkD4ebopFZYP0q1+3Vb2WECWv/T8yQEgKxDxJ7ztO285tAMaYZVR6mM1GgI6CCn8FROtL1w==
+
+regl@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/regl/-/regl-2.1.0.tgz#7dae71e9ff20f29c4f42f510c70cd92ebb6b657c"
+  integrity sha512-oWUce/aVoEvW5l2V0LK7O5KJMzUSKeiOwFuJehzpSFd43dO5spP9r+sSUfhKtsky4u6MCqWJaRL+abzExynfTg==
 
 resolve@^1.22.1:
   version "1.22.1"
