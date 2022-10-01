@@ -1,3 +1,4 @@
+//@ts-nocheck
 import REGL from "regl";
 import { Hydra, generators } from "hydra-ts";
 import ArrayUtils from "hydra-ts/src/lib/array-utils";
