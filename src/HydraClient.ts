@@ -4,6 +4,9 @@ import { Hydra, generators } from "hydra-ts";
 import ArrayUtils from "hydra-ts/src/lib/array-utils";
 
 class HydraClient {
+  private hydra;
+  private time = 0;
+
   constructor() {
     const WIDTH = 1080;
     const HEIGHT = 1080;
@@ -17,30 +20,35 @@ class HydraClient {
 
     ArrayUtils.init();
 
-    const regl = REGL(canvas);
+    const regl = REGL(canvas) as any;
 
-    const hydra = new Hydra({
+    this.hydra = new Hydra({
       width: WIDTH * DENSITY,
       height: HEIGHT * DENSITY,
       precision: "mediump",
       regl,
     });
 
-    hydra.loop.start();
+    this.hydra.loop.start();
 
-    const { sources, outputs, render } = hydra;
+    const { outputs, render } = this.hydra;
+    const [o0] = outputs;
+
+    render(o0);
+    setInterval(() => (this.time += 0.016), 16);
+  }
+  eval(code: string) {
+    const { sources, outputs, render } = this.hydra;
     const [s0, s1, s2, s3] = sources;
     const [o0, o1, o2, o3] = outputs;
-    const { src, osc, gradient, shape, voronoi, noise } = generators;
-
-    osc(() => 4 * Math.PI)
-      .add(o0, [0, 0.5].smooth())
-      .mult(src(o0).rotate(Math.PI / 2), 0.6)
-      .out(o0);
-
-    src(o0).scrollX(0.1, -0.1).scrollY(0.1, -0.1).out(o1);
-
-    render(o1);
+    const time = this.time;
+    //@ts-ignore
+    const { src, osc, gradient, shape, voronoi, noise, solid } = generators;
+    try {
+      eval(code);
+    } catch (error) {
+      console.log("error: ", error);
+    }
   }
 }
 

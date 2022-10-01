@@ -5,6 +5,8 @@ import HydraClient from "./HydraClient";
 const codeGenerator = new CodeGeneratorClient();
 codeGenerator.on(CODE_GENERATED, (code) => {
   editor.setValue(code);
+  hydraClient.eval(code);
+  navigator.clipboard.writeText(code);
 });
 const editor = new Editor();
-new HydraClient();
+const hydraClient = new HydraClient();
