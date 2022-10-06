@@ -10,7 +10,7 @@ A port from the @alecominotti python version
 
 # View on line
 
-https://alvarobyrne.github.io/hydra-code-generator/
+<a href="https://alvarobyrne.github.io/hydra-code-generator/" target="_blank">view on line</a>
 
 # TODO:
 
