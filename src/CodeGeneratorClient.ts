@@ -14,8 +14,12 @@ class CodeGeneratorClient extends EventEmitter {
 
     const gui = new dat.GUI();
     gui.width = 500;
-    gui.add(hydra, "minValue", 0, 5).name("min value for function arguments");
-    gui.add(hydra, "maxValue", 5, 10).name("max value for function arguments");
+    gui
+      .add(hydra, "minValue", 0, 5, 1)
+      .name("min value for function arguments");
+    gui
+      .add(hydra, "maxValue", 5, 10, 1)
+      .name("max value for function arguments");
 
     hydra.arrowFunctionProb;
     hydra.mouseFunctionProb;
@@ -101,9 +105,18 @@ class CodeGeneratorClient extends EventEmitter {
     });
 
     const externalLinksFolder = gui.addFolder("Links");
+    location;
+    console.log("location: ", location);
+    if (location.href.indexOf("127.0.0.1")) {
+      clickable(
+        "https://alvarobyrne.github.io/hydra-code-generator",
+        "this page live",
+        externalLinksFolder
+      );
+    }
     clickable(
       "https://github.com/alvarobyrne/hydra-code-generator",
-      "this repo's code",
+      "this page's code repo",
       externalLinksFolder
     );
     clickable(
