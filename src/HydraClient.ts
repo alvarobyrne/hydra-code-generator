@@ -4,9 +4,6 @@ import { Hydra, generators } from "hydra-ts";
 import ArrayUtils from "hydra-ts/src/lib/array-utils";
 
 class HydraClient {
-  private hydra;
-  private time = 0;
-
   constructor() {
     const WIDTH = 1080;
     const HEIGHT = 1080;
@@ -20,7 +17,7 @@ class HydraClient {
 
     ArrayUtils.init();
 
-    const regl = REGL(canvas) as any;
+    const regl = REGL(canvas);
 
     this.hydra = new Hydra({
       width: WIDTH * DENSITY,
@@ -31,18 +28,13 @@ class HydraClient {
 
     this.hydra.loop.start();
 
-    const { outputs, render } = this.hydra;
-    const [o0] = outputs;
-
-    render(o0);
-    setInterval(() => (this.time += 0.016), 16);
+    this.hydra.render(this.hydra.outputs.o0);
   }
   eval(code: string) {
     const { sources, outputs, render } = this.hydra;
     const [s0, s1, s2, s3] = sources;
     const [o0, o1, o2, o3] = outputs;
-    const time = this.time;
-    //@ts-ignore
+    const time = this.hydra.synth.time;
     const { src, osc, gradient, shape, voronoi, noise, solid } = generators;
     try {
       eval(code);
