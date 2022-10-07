@@ -31,12 +31,12 @@ class HydraClient {
     this.hydra.render(this.hydra.outputs.o0);
   }
   eval(code: string) {
-    const { sources, outputs, render } = this.hydra;
-    const [s0, s1, s2, s3] = sources;
-    const [o0, o1, o2, o3] = outputs;
-    const time = this.hydra.synth.time;
-    const { src, osc, gradient, shape, voronoi, noise, solid } = generators;
     try {
+      const { sources, outputs, render } = this.hydra;
+      const [s0, s1, s2, s3] = sources;
+      const [o0, o1, o2, o3] = outputs;
+      const time = this.hydra.synth.time;
+      const { src, osc, gradient, shape, voronoi, noise, solid } = generators;
       eval(code);
     } catch (error) {
       console.log("error: ", error);
