@@ -7,7 +7,7 @@ import { type EditorView } from "codemirror";
 // import { sendOSC } from "../../client/osc";
 // from https://github.com/mindofmatthew/text.management/blob/main/app/codemirror/evaluate/commands.ts
 
-export function getSelection({ state, dispatch }: EditorView) {
+export function getSelection({ state /* dispatch */ }: EditorView) {
   if (state.selection.main.empty) return false;
   console.log("running get selection");
   // dispatch({ effects: get.of(state.selection.main) });
@@ -20,7 +20,7 @@ export function getSelection({ state, dispatch }: EditorView) {
   //  return sendOSC("/tidal/code", text);
 }
 
-export function getLine({ state, dispatch }: EditorView) {
+export function getLine({ state /* dispatch */ }: EditorView) {
   const line = state.doc.lineAt(state.selection.main.from);
   // dispatch({ effects: get.of(line) });
   //return true;
@@ -33,7 +33,7 @@ export function getLine({ state, dispatch }: EditorView) {
   //return sendOSC("/tidal/code", text);
 }
 
-export function getBlock({ state, dispatch }: EditorView) {
+export function getBlock({ state /* dispatch*/ }: EditorView) {
   let { doc, selection } = state;
   let { text, number } = state.doc.lineAt(selection.main.from);
 

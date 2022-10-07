@@ -20,9 +20,10 @@ class Editor extends EventEmitter {
     const self = this;
     const hydraKeymaps = Object.entries(hydraKeysEvents).map(([key, val]) => ({
       key: key,
+      //@ts-ignore
       run: (opts) => {
         console.log("called", val, opts);
-        let text = "";
+        let text: string | boolean = "";
         if (val === "editor:evalLine") {
           text = getLine(opts);
         } else if (val === "editor:evalBlock") {
@@ -38,6 +39,7 @@ class Editor extends EventEmitter {
       extensions: [
         basicSetup,
         syntaxHighlighting(oneDarkHighlightStyle, { fallback: true }),
+        //@ts-ignore
         keymap.of([...hydraKeymaps]),
         EditorView.theme({
           "&": {
