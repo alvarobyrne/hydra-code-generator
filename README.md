@@ -14,7 +14,6 @@ A port from the @alecominotti python version
 
 # TODO:
 
-- (Super priority) Add keymaps for evaluation: there is no use in porting the code if one cannot evaluate code in this environment, so it is high priority to add alt+enter and such in order to be able to evaluate/live code here.
 - One shouldn't be able to mark the same function as _exclusive_ and _ignored_ at the same time, currently there is no error capturing for this
 - Remove many @ts-ignore comments
 ### Other functions 
