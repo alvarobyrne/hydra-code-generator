@@ -25,6 +25,10 @@ That I would like to add:
 
 - @ojack's https://github.com/ojack/hydra-editor-cm6 @ojack
 
+## using 
+
+https://github.com/folz/hydra-ts
+
 ### Code is copied to clipbaord
 
 Upon random generation code is also copied to clipboard so that it is easy to paste (for example at https://hydra.ojack.xyz)
