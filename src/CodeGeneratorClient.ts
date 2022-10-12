@@ -1,7 +1,7 @@
 import CodeGenerator from "./CodeGenerator";
 import dat from "dat.gui";
 import { EventEmitter } from "eventemitter3";
-import clickable from "./utils/dat.gui.clickable";
+import { setExternalLinks } from "./miscellanea/externalLinks";
 export const CODE_GENERATED = "code:generated";
 class CodeGeneratorClient extends EventEmitter {
   constructor() {
@@ -103,34 +103,7 @@ class CodeGeneratorClient extends EventEmitter {
         hydra.setIgnoredElement(name, value);
       });
     });
-
-    const externalLinksFolder = gui.addFolder("Links");
-    location;
-    console.log("location: ", location);
-    if (location.href.indexOf("127.0.0.1")) {
-      clickable(
-        "https://alvarobyrne.github.io/hydra-code-generator",
-        "this page live",
-        externalLinksFolder
-      );
-    }
-    clickable(
-      "https://github.com/alvarobyrne/hydra-code-generator",
-      "this page's code repo",
-      externalLinksFolder
-    );
-    clickable(
-      "https://hydracg.herokuapp.com/",
-      "original app",
-      externalLinksFolder
-    );
-    clickable(
-      "https://github.com/alecominotti/hydracodegenerator",
-      "original python repo",
-      externalLinksFolder
-    );
-
-    setTimeout(doGenerateCode, 1000);
+    setExternalLinks(gui);
   }
 }
 export default CodeGeneratorClient;
