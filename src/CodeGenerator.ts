@@ -168,7 +168,7 @@ class CodeGenerator {
     }
   }
   printError(msg: string) {
-    console.log(msg);
+    throw new Error(msg);
   }
   checkSources(sources: string[]) {
     console.log("sources: ", sources);
@@ -335,7 +335,16 @@ class CodeGenerator {
     // console.log("method: ", method);
     return method;
   }
+  exclusiveAndIgnoredErrorMessage = (
+    name: string,
+    type: "functions" | "sources"
+  ) =>
+    `Don't include ${name} in both,\n ignored elements and exclusive ${type}`;
+
   setExclusiveSource(name: string, isExclusive: boolean) {
+    if (this.ignoredList.includes(name)) {
+      throw new Error(this.exclusiveAndIgnoredErrorMessage(name, "sources"));
+    }
     if (isExclusive) {
       this.exclusiveSourceList.push(name);
     } else {
@@ -343,8 +352,11 @@ class CodeGenerator {
       this.exclusiveSourceList.splice(i, 1);
     }
   }
-  // exclusiveFunctionList
+
   setExclusiveFunction(name: string, isExclusive: boolean) {
+    if (this.ignoredList.includes(name)) {
+      throw new Error(this.exclusiveAndIgnoredErrorMessage(name, "functions"));
+    }
     if (isExclusive) {
       this.exclusiveFunctionList.push(name);
     } else {
@@ -353,6 +365,12 @@ class CodeGenerator {
     }
   }
   setIgnoredElement(name: string, isIgnored: boolean) {
+    if (this.exclusiveFunctionList.includes(name)) {
+      throw new Error(this.exclusiveAndIgnoredErrorMessage(name, "functions"));
+    }
+    if (this.exclusiveSourceList.includes(name)) {
+      throw new Error(this.exclusiveAndIgnoredErrorMessage(name, "sources"));
+    }
     if (isIgnored) {
       this.ignoredList.push(name);
     } else {
