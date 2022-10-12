@@ -32,9 +32,11 @@ class CodeGeneratorClient extends EventEmitter {
     gui
       .add(hydra, "arrowFunctionProb", 0, 100)
       .name("arrow function probability");
+    /*
     gui
       .add(hydra, "mouseFunctionProb", 0, 100)
       .name("mouse function probability");
+      */
     hydra.modulateItselfProb;
     gui
       .add(hydra, "modulateItselfProb", 0, 100)

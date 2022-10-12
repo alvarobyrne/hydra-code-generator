@@ -2,7 +2,7 @@ type CodeGeneratorProps = {
   min?: number;
   max?: number;
   arrowFunctionProb?: number;
-  mouseFunctionProb?: number;
+  // mouseFunctionProb?: number;
   modulateItselfProb?: number;
   ignoredList: string[];
   exclusiveSourceList: string[];
@@ -13,10 +13,10 @@ class CodeGenerator {
   public minValue = 0; // lower bound value to set as function argument,
   public maxValue = 5; // upper bound value to set as function argument,
   public arrowFunctionProb = 0; // Probabilities of generating an arrow function that changes value over time (ex.: () => Math.sin(time * 0.3)),
-  public mouseFunctionProb = 0; // Probabilities of generating an arrow function that uses mouse position (ex.: () => mouse.x),
+  // public mouseFunctionProb = 0; // Probabilities of generating an arrow function that uses mouse position (ex.: () => mouse.x),
   public modulateItselfProb = 20; // Probabilities of generating a modulation function with "o0" as argument (ex.: modulate(o0,1)),
   static mathFunctions = ["sin", "cos", "tan"];
-  static mouseList = ["mouse.x", "mouse.y"];
+  // static mouseList = ["mouse.x", "mouse.y"];
   static sourcesList = [
     "gradient",
     "noise",
@@ -90,7 +90,7 @@ class CodeGenerator {
     min,
     max,
     arrowFunctionProb,
-    mouseFunctionProb,
+    // mouseFunctionProb,
     modulateItselfProb,
     ignoredList,
     exclusiveSourceList,
@@ -112,6 +112,7 @@ class CodeGenerator {
         );
         return;
       }
+    /*
     if (mouseFunctionProb)
       if (0 <= mouseFunctionProb && mouseFunctionProb <= 100)
         this.mouseFunctionProb = mouseFunctionProb;
@@ -121,6 +122,7 @@ class CodeGenerator {
         );
         return;
       }
+      */
     if (modulateItselfProb)
       if (0 <= modulateItselfProb && modulateItselfProb <= 100)
         this.modulateItselfProb = modulateItselfProb;
@@ -223,6 +225,7 @@ class CodeGenerator {
         ];
       return `() => Math.${arrowFunctionName}(time * ${randomTimeMultiplier})`;
     }
+    /*
     //probabilities of generating a mouse function
     if (random.randint(1, 100) <= this.mouseFunctionProb) {
       return `() =>  ${
@@ -231,6 +234,7 @@ class CodeGenerator {
         ]
       }  * ${randomTimeMultiplier}`;
     }
+    */
     return "";
   }
   //generates a number, mouse, or math functions
