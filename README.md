@@ -14,8 +14,9 @@ A port from the @alecominotti python version
 
 # TODO:
 
-- One shouldn't be able to mark the same function as _exclusive_ and _ignored_ at the same time, currently there is no error capturing for this
-- Remove many @ts-ignore comments
+- currently, upon building using vite's defualt `tsconfig.json` file, there are many `ts` errors in the `hydra-ts`  library, so one has to add the `//@ts-nocheck` at the top of the files that throw such errors.
+- The mouse function probability has not been ported (and might not be)
+- Remove many `//@ts-ignore` comments
 ### Other functions 
 
 That I would like to add:
